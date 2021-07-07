@@ -4,7 +4,9 @@ import { Line, Bar } from 'react-chartjs-2';
 
 import './Chart.styles.css';
 
-export const Chart = ({ data, country }) => {
+export const Chart = ({ data: { confirmed, recovered, deaths }, country }) => {
+  // console.log(country)
+  // console.log(confirmed, recovered, deaths)
   const [dailyData, setDailyData] = useState({});
 
   useEffect(() => {
@@ -14,27 +16,8 @@ export const Chart = ({ data, country }) => {
 
     fetchAPI();
   }, []);
+  // console.log(dailyData)
 
-  // console.log(dailyData[2]);
-  // const LineChart = <Line data={{
-  //   labels: dailyData.map(({ date }) => date),
-  //   datasets: [
-  //     {
-  //       label: 'Infected',
-  //       data: dailyData.map(({ confirmed }) => confirmed),
-  //       fill: false,
-  //       backgroundColor: 'rgb(255, 99, 132)',
-  //       borderColor: 'rgba(255, 99, 132, 0.2)',
-  //     },
-  //     {
-  //       data: dailyData.map(({ deaths }) => deaths),
-  //       label: 'deaths',
-  //       borderColor: 'red',
-  //       backgroundColor: 'rgba(255, 0, 0, 0.5',
-  //       fill: false,
-  //     }
-  //   ],
-  // }} />
   const LineChart = dailyData.length ? (
     <Line
       data={{
@@ -57,10 +40,36 @@ export const Chart = ({ data, country }) => {
       }}
     />
   ) : null;
+
+  // console.log(confirmed, recovered, deaths)
+
+  console.log(country)
+  const barChart = confirmed ? (
+    <Bar
+      data={{
+        labels: ['infected', 'Recovered', 'Deaths'],
+        datasets: [
+          {
+            label: 'People',
+            backgroundColor: [
+              'rgba(0, 0, 255, 0.5)',
+              'rgba(255, 0, 0, 0.5)',
+              'rgba(0, 255, 0, 0.5)',
+            ],
+            data: [confirmed.value, recovered.value, deaths.value]
+          },
+        ],
+      }}
+      options={{
+        legend: { dispaly: false },
+        title: { display: true, text: `Current state in ${country}` },
+      }}
+    />
+  ) : null;
   return (
     <div className="container">
-      {/* <LineChart /> */}
-      {LineChart}
+      {/* {LineChart} */}
+      {Object.keys(country).length ? barChart : LineChart}
     </div>
   );
 };

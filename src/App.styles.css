@@ -8,3 +8,7 @@ body {
   align-items: center;
   flex-direction: column;
 }
+.img_styles {
+  width: 470px;
+  margin-top: 50px;
+}
